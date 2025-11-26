@@ -1,6 +1,6 @@
 
 type SearchFormProps = {
-  onSetSearchText: (text: string) => void;
+  onSetSearchText: (searchText: string) => void;
   searchText: string;
 };
 
