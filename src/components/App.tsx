@@ -12,12 +12,30 @@ import SortingControls from "./SortingControls";
 import JobList from "./JobList";
 import PaginationControls from "./PaginationControls";
 import { useJobItems } from "../lib/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
 
   const [searchText, setSearchText] = useState("");
   const [jobItems, isLoading] = useJobItems(searchText);
+  const [activeID, setActiveID] = useState<number | null>(null);
+
+  useEffect(() => {
+
+    const handleHashChange = () => {
+     const id =  +window.location.hash.slice(1);
+     setActiveID(id || null);
+    };
+
+    handleHashChange();
+
+    window.addEventListener("hashchange", handleHashChange);
+  
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    }
+
+  },[]);
 
   return <>  
     <Background />
