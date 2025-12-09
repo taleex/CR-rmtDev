@@ -30,14 +30,17 @@ export function useActiveID(){
 export function useJobItem(id: number | null) {
       
   const [JobItem, setJobItem] = useState<jobItemExpanded | null >(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
 
     if(!id) return;
 
     const fetchData = async () => {
+      setIsLoading(true);
       const response = await fetch(`${BASE_API_URL}/${id}`);
       const data = await response.json();
+      setIsLoading(false);
       setJobItem(data.jobItem);
     };
 
@@ -45,7 +48,7 @@ export function useJobItem(id: number | null) {
 
   }, [id]);
 
-  return JobItem;
+  return { JobItem, isLoading } as const;
 }
 
 export function useJobItems(searchText: string) {
@@ -53,6 +56,7 @@ export function useJobItems(searchText: string) {
       const [jobItems, setJobItems] = useState<jobItem[]>([]);
       const [isLoading, setIsLoading] = useState(false);
 
+      const totalNumberOfResults = jobItems.length;
       const jobitemsSliced = jobItems.slice(0, 7);
     
       useEffect(() => {
@@ -69,5 +73,19 @@ export function useJobItems(searchText: string) {
         fetchData();
             },[searchText]);
     
-        return [ jobitemsSliced, isLoading  ] as const;
+        return { jobitemsSliced, isLoading, totalNumberOfResults  };
+}
+
+export function useDebounced<T>(value: T, delay = 500): T {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+      useEffect(() =>{
+        const timerID = setTimeout(() => {
+          setDebouncedValue(value);
+        }, delay);
+    
+        return () => clearTimeout(timerID);
+      }, [value, delay]);
+
+      return debouncedValue;
 }
