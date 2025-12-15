@@ -41,7 +41,7 @@ export function useJobItem(id: number | null) {
     }
   );
 
-  return { jobItem: data, isLoading: isInitialLoading } as const;
+  return { jobItem: data?.jobItem, isLoading: isInitialLoading } as const;
 }
 
 const fetchJobItems = async (searchText: string): Promise<JobItemsAPIResponse> => {
@@ -72,8 +72,10 @@ export function useJobItems(searchText: string) {
         }
     );
 
+    //fix on future ( not alike the course, need to check)
+    const jobItems = data?.jobItems || data;
 
-    return { jobItems: data?.jobItems, isLoading: isInitialLoading   } as const;
+    return { jobItems: jobItems, isLoading: isInitialLoading   } as const;
 
 }        
 

@@ -20,9 +20,19 @@ function App() {
   const [searchText, setSearchText] = useState("");
   const debouncedSearchText = useDebounced(searchText, 250);
   const {jobItems, isLoading } = useJobItems(debouncedSearchText);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  //need to fix pagination properly in the future
   const totalNumberOfResults = jobItems?.length || 0;
   const jobitemsSliced = jobItems?.slice(0, 7) || [];
+
+  const handleChangePage = (direction: 'next' | 'previous') => {
+    if (direction === "next") {
+      setCurrentPage((prev) => prev + 1);
+    } else if (direction === "previous") {
+      setCurrentPage((prev) => Math.max(prev - 1, 1));
+    }
+  };
 
   return <>  
     <Background />
@@ -41,8 +51,8 @@ function App() {
           <ResultsCount totalNumberOfResults={totalNumberOfResults}/>
           <SortingControls />
         </SidebarTop>
-        <JobList isLoading={isLoading} jobItems={jobitemsSliced }/>
-        <PaginationControls />
+        <JobList isLoading={isLoading} jobItems={jobitemsSliced}/>
+        <PaginationControls currentPage={currentPage} onClick={handleChangePage}/>
       </Sidebar>
 
       <JobItemContent/>
