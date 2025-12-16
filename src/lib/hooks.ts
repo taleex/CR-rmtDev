@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { jobItem, jobItemExpanded } from "./types";
+import { jobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
@@ -9,11 +9,12 @@ type JobItemAPIResponse = {
   jobItem: jobItemExpanded;
 };
 
-type JobItemsAPIResponse = {
+type JobItemsApiResponse = {
   public: boolean;
+  jobItems: jobItemExpanded[];
   sorted: boolean;
-  jobItems: jobItem[];
 };
+
 
 const fetchJobItem = async (id: number): Promise<JobItemAPIResponse> =>  {
       const response = await fetch(`${BASE_API_URL}/${id}`);
@@ -44,7 +45,7 @@ export function useJobItem(id: number | null) {
   return { jobItem: data?.jobItem, isLoading: isInitialLoading } as const;
 }
 
-const fetchJobItems = async (searchText: string): Promise<JobItemsAPIResponse> => {
+const fetchJobItems = async (searchText: string):Promise<JobItemsApiResponse> => {
 
     const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
 
@@ -55,7 +56,7 @@ const fetchJobItems = async (searchText: string): Promise<JobItemsAPIResponse> =
 
     const data = await response.json();
 
-    return data.jobItems;
+    return data;
 }
 
 export function useJobItems(searchText: string) {
@@ -72,8 +73,7 @@ export function useJobItems(searchText: string) {
         }
     );
 
-    //fix on future ( not alike the course, need to check)
-    const jobItems = data?.jobItems || data;
+    const jobItems = data?.jobItems;
 
     return { jobItems: jobItems, isLoading: isInitialLoading   } as const;
 

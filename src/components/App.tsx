@@ -14,6 +14,7 @@ import PaginationControls from "./PaginationControls";
 import { useDebounced, useJobItems } from "../lib/hooks";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { RESULTS_PER_PAGE } from "../lib/constants";
 
 function App() {
 
@@ -24,7 +25,8 @@ function App() {
 
   //need to fix pagination properly in the future
   const totalNumberOfResults = jobItems?.length || 0;
-  const jobitemsSliced = jobItems?.slice(0, 7) || [];
+  const totalNumberOfPages = (totalNumberOfResults / RESULTS_PER_PAGE);
+  const jobitemsSliced = jobItems?.slice(currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE, currentPage * RESULTS_PER_PAGE) || [];
 
   const handleChangePage = (direction: 'next' | 'previous') => {
     if (direction === "next") {
@@ -52,7 +54,7 @@ function App() {
           <SortingControls />
         </SidebarTop>
         <JobList isLoading={isLoading} jobItems={jobitemsSliced}/>
-        <PaginationControls currentPage={currentPage} onClick={handleChangePage}/>
+        <PaginationControls totalNumberOfPages={totalNumberOfPages} currentPage={currentPage} onClick={handleChangePage}/>
       </Sidebar>
 
       <JobItemContent/>
