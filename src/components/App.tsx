@@ -57,7 +57,7 @@ function App() {
   const handleSortChange = (newsortBy: SortBy) => {
     setCurrentPage(1);
     setSortBy(newsortBy);
-  }
+  };
 
   return <>  
     <Background />
@@ -65,7 +65,7 @@ function App() {
     <Header>
        <HeaderTop>
         <Logo />
-        <BookmarksButton />
+        <BookmarksButton/>
       </HeaderTop>
       <SearchForm searchText={searchText} onSetSearchText={setSearchText} />
     </Header>

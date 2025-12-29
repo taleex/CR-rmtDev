@@ -36,7 +36,7 @@ export default function JobItemContent() {
             <div className="job-info__below-badge">
               <time className="job-info__time">{JobItem.daysAgo}d</time>
 
-              <BookmarkIcon jobitem={JobItem}/>
+              <BookmarkIcon id={JobItem.id}/>
             </div>
           </div>
 

@@ -1,6 +1,14 @@
+import { SortBy } from "../lib/types";
+
 type SortingControlsProps = {
-  onClick: (sortBy: 'relevant' | 'recent') => void;
-  sortBy: 'relevant' | 'recent';
+  onClick: (newsortBy: SortBy) => void;
+  sortBy: SortBy;
+};
+
+type SortyButtonProps = {
+  children: React.ReactNode;
+  onClick: () => void;
+  isActive: boolean;
 };
 
 export default function SortingControls({onClick, sortBy}: SortingControlsProps) {
@@ -9,13 +17,16 @@ export default function SortingControls({onClick, sortBy}: SortingControlsProps)
     <section className="sorting">
       <i className="fa-solid fa-arrow-down-short-wide"></i>
 
-      <button onClick={() => onClick('relevant')} className={`sorting__button sorting__button--relevant ${sortBy === 'relevant' ? 'sorting__button--active' : ''}`}>
-        Relevant
-      </button>
+      <SortingButton onClick={() =>onClick('relevant')} isActive={sortBy === 'relevant'}>Relevant</SortingButton>
+      <SortingButton onClick={() => onClick('recent')} isActive={sortBy === 'recent'}>Recent</SortingButton>
 
-      <button onClick={() => onClick('recent')} className={`sorting__button sorting__button--recent ${sortBy === 'recent' ? 'sorting__button--active' : ''}`}>
-        Recent
-      </button>
     </section>
   );
+}
+
+function SortingButton({children, onClick, isActive}:SortyButtonProps) {
+  return ( 
+    <button onClick={onClick} className={`sorting__button sorting__button--relevant ${ isActive ? 'sorting__button--active' : ''}`}>
+        {children}
+    </button> );
 }
