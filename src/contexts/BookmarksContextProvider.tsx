@@ -27,3 +27,4 @@ export default function BookmarksContextProvider({children}: {children: React.Re
     </BookmarksContext.Provider>
   )
 }
+
