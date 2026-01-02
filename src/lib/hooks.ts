@@ -60,10 +60,10 @@ export function useJobItems (ids: number[]) {
     }))
   });    
 
-  const jobItems = results.map(result => result.data?.jobItem).filter(jobItem => jobItem !== undefined );
+  const jobItems = results.map(result => result.data?.jobItem).filter(jobItem => Boolean(jobItem)) as jobItemExpanded[];
   const isLoading = results.some(result => result.isLoading);
 
-  return {jobItems, isLoading};
+  return {jobItems, isLoading} as const;
 
 }
 
