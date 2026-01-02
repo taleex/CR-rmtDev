@@ -4,6 +4,7 @@ import { BASE_API_URL } from "./constants";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
+import { ActiveIdContext } from "../contexts/ActiveIdContextProvider";
 
 type JobItemAPIResponse = {
   public: boolean;
@@ -67,7 +68,6 @@ export function useJobItems (ids: number[]) {
 
 }
 
-// ------------------------------------------------------------
 
 
 const fetchJobItems = async (searchText: string):Promise<JobItemsApiResponse> => {
@@ -103,6 +103,8 @@ export function useSearchQuery(searchText: string) {
     return { jobItems: jobItems, isLoading: isInitialLoading   } as const;
 
 }        
+
+// ------------------------------------------------------------
 
 export function useDebounced<T>(value: T, delay = 500): T {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -153,10 +155,28 @@ export function useLocalStorage<T>(key:string, initialValue: T): [T, React.Dispa
   return [value, setValue] as const;
 }
 
+export function useOnClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => void) {
+  
+  useEffect(() => {
+
+    const handleClick = (e: MouseEvent) => {
+      if (
+        refs.every((ref) => !ref.current?.contains(e.target as Node))
+       ) {
+      handler();
+    }
+  };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click',handleClick);
+    }
+  }, [refs,handler]);
+
+}
+
 // ------------------------------------------------------------
-
-
-
 
 export function useBookmarksContext() {
 
@@ -169,3 +189,13 @@ export function useBookmarksContext() {
 
 }
 
+export function useActiveIdContext() {
+
+    const context = useContext(ActiveIdContext);
+    if (!context) {
+      throw new Error("useActiveIdContext must be used withn a ActiveIdContextProvider");
+    }
+  
+    return context;
+
+}
