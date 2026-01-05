@@ -154,7 +154,7 @@ export function useLocalStorage<T>(key:string, initialValue: T): [T, React.Dispa
      localStorage.setItem(key, JSON.stringify(value));
   }, [value, key]);
 
-  return [value, setValue] as const;
+  return [value, setValue];
 }
 
 export function useOnClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => void) {
